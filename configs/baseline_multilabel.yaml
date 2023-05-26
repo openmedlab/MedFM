@@ -1,0 +1,28 @@
+model_run:
+    run_swin: True
+    run_effi: True
+    run_dens: True
+model_cfg:
+    swin_model_name: 'swin-base'
+    swin_model_config: './configs/swin_transformer/swin-base_16xb64_in1k-384px.py'
+    swin_model_checkpoint: './pretrain/swin_base_patch4_window12_384_22kto1k-d59b0d1d.pth'
+    effi_model_name: 'efficient-b4'
+    effi_model_config: './configs/efficientnet/efficientnet-b4_8xb32_in1k.py'
+    effi_model_checkpoint: './pretrain/efficientnet-b4_3rdparty_8xb32-aa_in1k_20220119-45b8bd2b.pth'
+    dens_model_name: 'dense121'
+    dens_model_config: './configs/densenet/densenet121_4xb256_in1k.py'
+    dens_model_checkpoint: './pretrain/densenet121_4xb256_in1k_20220426-07450f99.pth'
+data_cfg:
+    chest:
+        N_way: 19
+        images_dir: './data/MedFMC/chest/images'
+        train_list_txt: './data/MedFMC/chest/trainval.txt'
+        test_list_txt: './data/MedFMC/chest/test_WithLabel.txt'
+    endo:
+        N_way: 4
+        images_dir: './data/MedFMC/endo/images'
+        train_list_txt: './data/MedFMC/endo/trainval.txt'
+        test_list_txt: './data/MedFMC/endo/test_WithLabel.txt'
+method_cfg:
+    K_shot_set: [1, 5, 10]
+    max_iters: 10
