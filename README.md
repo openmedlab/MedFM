@@ -14,7 +14,7 @@ $ mim install mmcv-full==1.6.0
 
 We suggest you install PyTorch successfully first, then install OpenMMLab packages and their dependencies.
 
-Moreover, you can use other Computer Vision　or other foundation models such as [EVA](https://github.com/baaivision/EVA) and [CLIP](https://github.com/openai/CLIP).
+Moreover, you can use other Computer Vision or other foundation models such as [EVA](https://github.com/baaivision/EVA) and [CLIP](https://github.com/openai/CLIP).
 
 ## Results
 
@@ -119,6 +119,7 @@ data/
 
 Noted that the `.txt` files includes data split information for fully supervised learning and few-shot learning tasks.
 The public dataset is splited to `trainval.txt` and `test_WithLabel.txt`, and `trainval.txt` is also splited to `train_20.txt` and `val_20.txt` where `20` means the training data makes up 20% of `trainval.txt`.
+And the `test_WithoutLabel.txt` of each dataset is validation set.
 
 Corresponding `.txt` files are stored at `./data_backup/` folder, the few-shot learning data split files `{dataset}_{N_shot}-shot_train/val_exp{N_exp}.txt` could also be generated as below:
 
@@ -150,16 +151,16 @@ python tools/train.py $CONFIG
 # Evaluation
 # Endo and ChestDR utilize mAP as metric
 python tools/test.py $CONFIG $CHECKPOINT --metrics mAP
-python tools/test.py $CONFIG $CHECKPOINT --metrics AUC_multiclass
+python tools/test.py $CONFIG $CHECKPOINT --metrics AUC_multilabel
 # Colon utilizes accuracy as metric
 python tools/test.py $CONFIG $CHECKPOINT --metrics accuracy --metric-options topk=1
-python tools/test.py $CONFIG $CHECKPOINT --metrics AUC_multilabel
+python tools/test.py $CONFIG $CHECKPOINT --metrics AUC_multiclass
 
 ```
 
 The repository is built upon [MMClassification/MMPretrain](https://github.com/open-mmlab/mmpretrain/tree/master). More details could be found in its [document](https://mmpretrain.readthedocs.io/en/mmcls-0.x/).
 
-### Generating Submission results
+### Generating Submission results of validation set
 
 Run
 
