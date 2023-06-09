@@ -1,6 +1,6 @@
-# MedFMC'2023: Foundation Models for Medical Image Analysis Challenge 2023
+# NeurIPS 2023 - MedFM: Foundation Model Prompting for Medical Image Classification Challenge 2023
 
-A naive baseline and submission demo for the [Foundation Models for Medical Image Analysis Challenge 2023 (MedFMC'2023)](https://medfm2023.grand-challenge.org/medfm2023/).
+A naive baseline and submission demo for the [Foundation Model Prompting for Medical Image Classification Challenge 2023 (MedFM)](https://medfm2023.grand-challenge.org/medfm2023/).
 
 ## Installation
 
