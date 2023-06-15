@@ -125,3 +125,4 @@ vis/
 analysis/*
 pretrain/*
 *.dist_test
+work_dirs/
