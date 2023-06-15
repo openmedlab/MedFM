@@ -31,12 +31,15 @@ data = dict(
     samples_per_gpu=4,  # use 2 gpus, total 128
     train=dict(
         ann_file=
-        f'data/MedFMC/{dataset}/{dataset}_{nshot}-shot_train_exp{exp_num}.txt'
+        f'data_backup/MedFMC/{dataset}/{dataset}_{nshot}-shot_train_exp{exp_num}.txt'
     ),
     val=dict(
         ann_file=
-        f'data/MedFMC/{dataset}/{dataset}_{nshot}-shot_val_exp{exp_num}.txt'),
-    test=dict(ann_file=f'data/MedFMC/{dataset}/test_WithLabel.txt'))
+        f'data_backup/MedFMC/{dataset}/{dataset}_{nshot}-shot_val_exp{exp_num}.txt'),
+    test=dict(
+        ann_file=
+        f'data_backup/MedFMC/{dataset}/{dataset}_{nshot}-shot_val_exp{exp_num}.txt'),)
+    # test=dict(ann_file=f'data/MedFMC/{dataset}/test_WithLabel.txt'))
 
 optimizer = dict(lr=lr)
 
@@ -45,7 +48,7 @@ log_config = dict(
         dict(type='TextLoggerHook'),
     ])
 
-load_from = 'work_dirs/swin_base_patch4_window12_384_22kto1k-d59b0d1d.pth'
+load_from = 'https://download.openmmlab.com/mmclassification/v0/swin-transformer/convert/swin_base_patch4_window12_384_22kto1k-d59b0d1d.pth'
 work_dir = f'work_dirs/exp{exp_num}/{run_name}'
 
 runner = dict(type='EpochBasedRunner', max_epochs=20)

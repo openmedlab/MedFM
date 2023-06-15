@@ -1,12 +1,12 @@
 import torch
 import torch.nn as nn
-from mmcls.models import BACKBONES
-from mmcls.models.backbones import VisionTransformer
-from mmcls.models.utils import resize_pos_embed
+from mmpretrain.registry import MODELS
+from mmpretrain.models.backbones import VisionTransformer
+from mmpretrain.models.utils import resize_pos_embed
 from typing import List
 
 
-@BACKBONES.register_module()
+@MODELS.register_module()
 class PromptedVisionTransformer(VisionTransformer):
 
     def __init__(self,

@@ -149,16 +149,11 @@ export PYTHONPATH=$PWD:$PYTHONPATH
 python tools/train.py $CONFIG
 
 # Evaluation
-# Endo and ChestDR utilize mAP as metric
-python tools/test.py $CONFIG $CHECKPOINT --metrics mAP
-python tools/test.py $CONFIG $CHECKPOINT --metrics AUC_multilabel
-# Colon utilizes accuracy as metric
-python tools/test.py $CONFIG $CHECKPOINT --metrics accuracy --metric-options topk=1
-python tools/test.py $CONFIG $CHECKPOINT --metrics AUC_multiclass
+python tools/test.py $CONFIG $CHECKPOINT 
 
 ```
 
-The repository is built upon [MMClassification/MMPretrain](https://github.com/open-mmlab/mmpretrain/tree/master). More details could be found in its [document](https://mmpretrain.readthedocs.io/en/mmcls-0.x/).
+The repository is built upon [MMPretrain](https://github.com/open-mmlab/mmpretrain). More details could be found in its [document](https://mmpretrain.readthedocs.io/en/latest/index.html).
 
 ### Generating Submission results of validation set
 

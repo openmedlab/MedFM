@@ -1,5 +1,5 @@
 # dataset settings
-dataset_type = 'Endoscopy'
+dataset_type = 'Colon'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 train_pipeline = [
@@ -23,23 +23,26 @@ test_pipeline = [
     dict(type='Collect', keys=['img'])
 ]
 data = dict(
-    samples_per_gpu=4,
+    samples_per_gpu=2,
     workers_per_gpu=4,
     train=dict(
         type=dataset_type,
-        data_prefix='data/MedFMC/endo/images',
-        ann_file='data/MedFMC/endo/train_20.txt',
+        data_prefix='data/MedFMC_train/colon/images',
+        ann_file='data_backup/MedFMC/colon/train_20.txt',
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
-        data_prefix='data/MedFMC/endo/images',
-        ann_file='data/MedFMC/endo/val_20.txt',
+        data_prefix='data/MedFMC_train/colon/images',
+        ann_file='data_backup/MedFMC/colon/val_20.txt',
         pipeline=test_pipeline),
     test=dict(
         # replace `data/val` with `data/test` for standard test
         type=dataset_type,
-        data_prefix='data/MedFMC/endo/images',
-        ann_file='data/MedFMC/endo/test_WithLabel.txt',
+        data_prefix='data/MedFMC_train/colon/images',
+        ann_file='data_backup/MedFMC/colon/test_WithLabel.txt',
         pipeline=test_pipeline))
-# evaluation = dict(interval=1, metric='mAP', save_best='auto')
-evaluation = dict(interval=1, metric='AUC_multilabel', save_best='auto')
+evaluation = dict(
+    interval=1,
+    metric='accuracy',
+    metric_options={'topk': 1},
+    save_best='auto')

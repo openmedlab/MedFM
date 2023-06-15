@@ -1,17 +1,29 @@
+# Copyright (c) OpenMMLab. All rights reserved.
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.checkpoint as cp
 from copy import deepcopy
-from mmcls.models import BACKBONES
-from mmcls.models.backbones.swin_transformer import (SwinBlock,
+
+from copy import deepcopy
+from typing import Sequence
+
+import torch
+import torch.nn as nn
+import torch.utils.checkpoint as cp
+from mmcv.cnn.bricks.transformer import PatchEmbed, PatchMerging
+from mmengine.model import ModuleList
+from mmpretrain.registry import MODELS
+
+from mmpretrain.models.utils import (ShiftWindowMSA, resize_pos_embed, to_2tuple)
+
+
+from mmpretrain.models.backbones.swin_transformer import (SwinBlock,
                                                      SwinBlockSequence,
                                                      SwinTransformer)
-from mmcls.models.utils import resize_pos_embed, to_2tuple
-from mmcls.models.utils.attention import ShiftWindowMSA, WindowMSA
+from mmpretrain.models.utils.attention import ShiftWindowMSA, WindowMSA
 from mmcv.cnn.bricks.transformer import (AdaptivePadding, PatchEmbed,
                                          PatchMerging)
-from mmcv.runner.base_module import BaseModule, ModuleList
 from typing import List, Sequence
 
 
@@ -655,7 +667,7 @@ class PromptedSwinBlockSequence(SwinBlockSequence):
             return self.embed_dims
 
 
-@BACKBONES.register_module()
+@MODELS.register_module()
 class PromptedSwinTransformer(SwinTransformer):
 
     def __init__(
