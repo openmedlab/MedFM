@@ -17,3 +17,8 @@ model = dict(
         )),
     head=dict(num_classes=2),
 )
+
+default_hooks = dict(
+    checkpoint = dict(type='CheckpointHook', interval=1, max_keep_ckpts=1),
+    logger=dict(interval=50),
+)

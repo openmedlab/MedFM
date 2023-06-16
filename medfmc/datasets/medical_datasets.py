@@ -24,7 +24,6 @@ class Chest19(CustomDataset):
 
     def load_data_list(self):
         data_list = []
-
         with open(self.ann_file) as f:
             samples = [x.strip() for x in f.readlines()]
             for item in samples:

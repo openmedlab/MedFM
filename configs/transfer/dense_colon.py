@@ -33,3 +33,10 @@ model = dict(
         )),
     head=dict(num_classes=2),
 )
+
+train_dataloader = dict(batch_size=6)
+
+default_hooks = dict(
+    checkpoint = dict(type='CheckpointHook', interval=1, max_keep_ckpts=1),
+    logger=dict(interval=50),
+)

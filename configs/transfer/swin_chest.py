@@ -2,7 +2,7 @@
 _base_ = [
     'mmpretrain::_base_/models/swin_transformer/base_384.py',
     '../datasets/chest.py',
-    'mmpretrain::_base_/schedules/imagenet_bs1024_adamw_swin.py',
+    '../swin_schedule.py',
     '../custom_imports.py', 
     'mmpretrain::_base_/default_runtime.py',
 ]
@@ -16,5 +16,10 @@ model = dict(
             'https://download.openmmlab.com/mmclassification/v0/swin-transformer/convert/swin_base_patch4_window12_384_22kto1k-d59b0d1d.pth',
             prefix='backbone',
         )),
-    head=dict(type='MultiLabelLinearClsHead', num_classes=19, loss=dict(type='CrossEntropyLoss', use_sigmoid=True, loss_weight=1.0),),
+    head=dict(_delete_=True, type='MultiLabelLinearClsHead', num_classes=19, in_channels=1024, loss=dict(type='CrossEntropyLoss', use_sigmoid=True, loss_weight=1.0),),
+)
+
+default_hooks = dict(
+    checkpoint = dict(type='CheckpointHook', interval=1, max_keep_ckpts=1),
+    logger=dict(interval=50),
 )

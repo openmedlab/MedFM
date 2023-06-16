@@ -2,7 +2,7 @@
 _base_ = [
     'mmpretrain::_base_/models/swin_transformer/base_384.py',
     '../datasets/colon.py',
-    'mmpretrain::_base_/schedules/imagenet_bs1024_adamw_swin.py',
+    '../swin_schedule.py',
     '../custom_imports.py', 
     'mmpretrain::_base_/default_runtime.py',
 ]
@@ -17,4 +17,9 @@ model = dict(
             prefix='backbone',
         )),
     head=dict(num_classes=2),
+)
+
+default_hooks = dict(
+    checkpoint = dict(type='CheckpointHook', interval=1, max_keep_ckpts=1),
+    logger=dict(interval=50),
 )

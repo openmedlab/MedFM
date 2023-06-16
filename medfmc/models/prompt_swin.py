@@ -320,10 +320,10 @@ class PromptedShiftWindowMSA(ShiftWindowMSA):
                  proj_drop=0,
                  dropout_layer=dict(type='DropPath', drop_prob=0.),
                  pad_small_map=False,
-                 input_resolution=None,
-                 auto_pad=None,
+                #  input_resolution=None,
+                #  auto_pad=None,
                  window_msa=WindowMSA,
-                 msa_cfg=dict(),
+                #  msa_cfg=dict(),
                  init_cfg=None,
                  prompt_length=1,
                  prompt_pos='prepend'):
@@ -338,10 +338,10 @@ class PromptedShiftWindowMSA(ShiftWindowMSA):
             proj_drop=proj_drop,
             dropout_layer=dropout_layer,
             pad_small_map=pad_small_map,
-            input_resolution=input_resolution,
-            auto_pad=auto_pad,
+            # input_resolution=input_resolution,
+            # auto_pad=auto_pad,
             window_msa=window_msa,
-            msa_cfg=msa_cfg,
+            # msa_cfg=msa_cfg,
             init_cfg=init_cfg)
         self.prompt_length = prompt_length
         self.prompt_pos = prompt_pos
@@ -356,7 +356,7 @@ class PromptedShiftWindowMSA(ShiftWindowMSA):
                 qk_scale=qk_scale,
                 attn_drop=attn_drop,
                 proj_drop=proj_drop,
-                **msa_cfg,
+                # **msa_cfg,
             )
 
     def forward(self, query, hw_shape):
@@ -686,8 +686,9 @@ class PromptedSwinTransformer(SwinTransformer):
         prompt_layers=None,
         prompt_pos='prepend',
         prompt_init='normal',
+        **kwargs
     ):
-        super().__init__(arch=arch)
+        super().__init__(arch=arch, **kwargs)
         self.prompt_length = prompt_length
         self.prompt_pos = prompt_pos
         self.avgpool = nn.AdaptiveAvgPool1d(1)

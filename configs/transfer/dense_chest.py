@@ -41,3 +41,8 @@ model = dict(
         in_channels=1024,
         loss=dict(type='CrossEntropyLoss', use_sigmoid=True, loss_weight=1.0),
     ))
+
+default_hooks = dict(
+    checkpoint = dict(type='CheckpointHook', interval=1, max_keep_ckpts=1),
+    logger=dict(interval=50),
+)
