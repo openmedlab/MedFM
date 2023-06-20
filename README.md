@@ -145,7 +145,6 @@ For the training and testing, you can directly use commands below to train and t
 # you need to export path in terminal so the `custom_imports` in config would work
 export PYTHONPATH=$PWD:$PYTHONPATH
 # Training
-# you can choose a config file like `configs/vit-b16_vpt/in21k-vitb16_vpt1_bs4_lr6e-4_1-shot_chest.py` to train its model
 python tools/train.py $CONFIG
 
 # Evaluation

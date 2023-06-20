@@ -1,7 +1,7 @@
 from .prompt_swin import PromptedSwinTransformer
-from .prompt_vit import PromptedVisionTransformer
+from .prompt_vit import PromptedViT
 
 __all__ = [
-    'PromptedVisionTransformer', 
+    'PromptedViT', 
     'PromptedSwinTransformer'
 ]
