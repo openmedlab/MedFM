@@ -1,5 +1,5 @@
 _base_ = [
-    '../datasets/chest.py',
+    '../datasets/colon.py',
     '../swin_schedule.py',
     'mmpretrain::_base_/default_runtime.py',
     '../custom_imports.py',
@@ -7,8 +7,8 @@ _base_ = [
 
 
 lr = 5e-3
-vpl = 1  
-dataset = 'chest'
+vpl = 1
+dataset = 'colon'
 exp_num = 1
 nshot = 10
 run_name = f'vit-b_{nshot}-shot_ptokens-{vpl}_{dataset}'
@@ -21,23 +21,12 @@ data_preprocessor = dict(
     to_rgb=True,
 )
 
-"""
-avg_featmap          :   64.8735
-cls_token            :   66.6902
-avg_prompt           :   64.1588
-avg_prompt_clstoken  :   65.9330
-avg_three            :   66.9306
-avg_all              :   66.9924
-"""
-
-
 model = dict(
     type='ImageClassifier',
     backbone=dict(
         type='PromptedViT',
         prompt_length=vpl,
         patch_size=16,
-        out_type='avg_featmap',
         arch='b',
         img_size=384,
         init_cfg=dict(
@@ -49,9 +38,10 @@ model = dict(
         ),
     neck=None,
     head=dict(
-        type='MultiLabelLinearClsHead',
-        num_classes=19,
+        type='LinearClsHead',
+        num_classes=2,
         in_channels=768,
+        loss=dict(type='CrossEntropyLoss', loss_weight=1.0),
     ))
 
 train_dataloader = dict(

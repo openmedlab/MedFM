@@ -5,12 +5,11 @@ _base_ = [
     '../custom_imports.py',
 ]
 
-
 lr = 5e-3
-vpl = 1  
+vpl = 1
 dataset = 'chest'
 exp_num = 1
-nshot = 10
+nshot = 5
 run_name = f'vit-b_{nshot}-shot_ptokens-{vpl}_{dataset}'
 
 # dataset setting
@@ -21,29 +20,18 @@ data_preprocessor = dict(
     to_rgb=True,
 )
 
-"""
-avg_featmap          :   64.8735
-cls_token            :   66.6902
-avg_prompt           :   64.1588
-avg_prompt_clstoken  :   65.9330
-avg_three            :   66.9306
-avg_all              :   66.9924
-"""
-
-
 model = dict(
     type='ImageClassifier',
     backbone=dict(
         type='PromptedViT',
         prompt_length=vpl,
-        patch_size=16,
-        out_type='avg_featmap',
+        patch_size=32,
         arch='b',
         img_size=384,
         init_cfg=dict(
             type='Pretrained',
             checkpoint=
-            'https://download.openmmlab.com/mmclassification/v0/vit/finetune/vit-base-p16_in21k-pre-3rdparty_ft-64xb64_in1k-384_20210928-98e8652b.pth',
+            'https://download.openmmlab.com/mmclassification/v0/vit/finetune/vit-base-p32_in21k-pre-3rdparty_ft-64xb64_in1k-384_20210928-9cea8599.pth',
             prefix='backbone',
         ),
         ),
@@ -77,3 +65,4 @@ default_hooks = dict(
 )
 
 work_dir = f'work_dirs/vit-b/exp{exp_num}/{run_name}'
+
