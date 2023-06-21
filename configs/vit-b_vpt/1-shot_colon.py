@@ -5,13 +5,12 @@ _base_ = [
     '../custom_imports.py',
 ]
 
-lr = 5e-2
-n = 1
-vpl = 5
+lr = 5e-3
+vpl = 1
 dataset = 'colon'
 exp_num = 1
 nshot = 1
-run_name = f'in21k-vit-b_vpt-{vpl}_bs4_lr{lr}_{nshot}-shot_{dataset}'
+run_name = f'vit-b_{nshot}-shot_ptokens-{vpl}_{dataset}'
 
 # dataset setting
 data_preprocessor = dict(

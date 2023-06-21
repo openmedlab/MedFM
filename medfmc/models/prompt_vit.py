@@ -20,13 +20,14 @@ class PromptedViT(VisionTransformer):
     # 'avg_prompt' avg of 'prompt'
     # 'avg_prompt_clstoken' avg of 'cls_token' and 'prompt'
     def __init__(self,
-                 prompt_length = 5,
+                 prompt_length = 1,
                  deep_prompt = True,
+                 out_type='avg_all',
                  prompt_init: str = 'normal',
                  norm_cfg=dict(type='LN'),
                  *args,
                  **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, out_type=out_type,  norm_cfg=norm_cfg, **kwargs)
 
         self.prompt_layers = len(self.layers) if deep_prompt else 1
         prompt = torch.empty(
@@ -108,7 +109,7 @@ class PromptedViT(VisionTransformer):
             # (B, N, C) -> (B, H, W, C) -> (B, C, H, W)
             return patch_token.reshape(B, *hw, -1).permute(0, 3, 1, 2)
         if self.out_type == 'avg_featmap':
-            return self.ln2(patch_token.mean(dim=1))     
+            return self.ln2(x[:, self.prompt_length:].mean(dim=1))     
         if self.out_type == 'avg_all':
             return self.ln2(x.mean(dim=1))  
         if self.out_type == 'avg_prompt':

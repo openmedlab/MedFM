@@ -49,6 +49,14 @@ The results are shown as below:
 |   5    |  384x384  |  20   | 23.88 | 67.48 | [config](configs/swin-b_vpt/in21k-swin-b_vpt5_bs4_lr5e-2_5-shot_endo_adamw.py)  |
 |   10   |  384x384  |  20   | 25.62 | 71.41 | [config](configs/swin-b_vpt/in21k-swin-b_vpt5_bs4_lr5e-2_10-shot_endo_adamw.py) |
 
+#### ViT-base Result (AUC)
+
+|      Dataset    |   Swin  |  ViT-cls |  ViT-eva2 |  ViT-dinov2  | ViT-clip |
+| :-------------: |  :----: | :------: | :------:  |  :---------: | :------: | 
+|    ChestDR      |  62.18  |   62.18  |   62.18   |      62.18   |   -----  |
+|    ColonPath    |  67.48  |   62.18  |   62.18   |      62.18   |   -----  |
+|      Endo       |  71.41  |   62.18  |   62.18   |      62.18   |   -----  |
+ 
 ### Transfer Learning on 20% (Fully Supervised Task)
 
 Noted that MedFMC mainly focuses on few-shot learning i.e., transfer learning task.

@@ -5,13 +5,12 @@ _base_ = [
     '../custom_imports.py',
 ]
 
-lr = 5e-2
-n = 1
-vpl = 5
+lr = 5e-3
+vpl = 1
 dataset = 'endo'
 exp_num = 1
 nshot = 1
-run_name = f'in21k-vit-b_vpt-{vpl}_bs4_lr{lr}_{nshot}-shot_{dataset}'
+run_name = f'vit-b_{nshot}-shot_ptokens-{vpl}_{dataset}'
 
 # dataset setting
 data_preprocessor = dict(
@@ -26,13 +25,13 @@ model = dict(
     backbone=dict(
         type='PromptedViT',
         prompt_length=vpl,
-        patch_size=32,
+        patch_size=16,
         arch='b',
         img_size=384,
         init_cfg=dict(
             type='Pretrained',
             checkpoint=
-            'https://download.openmmlab.com/mmclassification/v0/vit/finetune/vit-base-p32_in21k-pre-3rdparty_ft-64xb64_in1k-384_20210928-9cea8599.pth',
+            'https://download.openmmlab.com/mmclassification/v0/vit/finetune/vit-base-p16_in21k-pre-3rdparty_ft-64xb64_in1k-384_20210928-98e8652b.pth',
             prefix='backbone',
         ),
         ),
