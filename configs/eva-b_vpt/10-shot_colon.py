@@ -11,7 +11,7 @@ vpl = 1
 dataset = 'colon'
 exp_num = 1
 nshot = 10
-run_name = f'vit-b_{nshot}-shot_ptokens-{vpl}_{dataset}'
+run_name = f'eva02-b-b_{nshot}-shot_ptokens-{vpl}_{dataset}'
 
 data_preprocessor = dict(
     # RGB format normalization parameters
@@ -95,4 +95,4 @@ default_hooks = dict(
     logger=dict(interval=50),
 )
 
-work_dir = f'work_dirs/vit-b/exp{exp_num}/{run_name}'
+work_dir = f'work_dirs/eva02-b-b/exp{exp_num}/{run_name}'

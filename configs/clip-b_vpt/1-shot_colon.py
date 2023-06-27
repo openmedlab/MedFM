@@ -10,7 +10,7 @@ vpl = 1
 dataset = 'colon'
 exp_num = 1
 nshot = 1
-run_name = f'vit-b_{nshot}-shot_ptokens-{vpl}_{dataset}'
+run_name = f'clip-b_{nshot}-shot_ptokens-{vpl}_{dataset}'
 
 # dataset setting
 data_preprocessor = dict(
