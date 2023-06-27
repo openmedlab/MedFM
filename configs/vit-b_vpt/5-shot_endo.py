@@ -25,13 +25,14 @@ model = dict(
     backbone=dict(
         type='PromptedViT',
         prompt_length=vpl,
-        patch_size=32,
+        out_type='cls_token',
+        patch_size=16,
         arch='b',
         img_size=384,
         init_cfg=dict(
             type='Pretrained',
             checkpoint=
-            'https://download.openmmlab.com/mmclassification/v0/vit/finetune/vit-base-p32_in21k-pre-3rdparty_ft-64xb64_in1k-384_20210928-9cea8599.pth',
+            'https://download.openmmlab.com/mmclassification/v0/vit/finetune/vit-base-p16_in21k-pre-3rdparty_ft-64xb64_in1k-384_20210928-98e8652b.pth',
             prefix='backbone',
         ),
         ),
@@ -41,14 +42,14 @@ model = dict(
         num_classes=4,
         in_channels=768,
     ))
-
+    
 train_dataloader = dict(
     batch_size=4, 
     dataset=dict(ann_file=f'data_backup/MedFMC/{dataset}/{dataset}_{nshot}-shot_train_exp{exp_num}.txt'),
 )
 
 val_dataloader = dict(
-    batch_size=4,  
+    batch_size=8,  
     dataset=dict(ann_file=f'data_backup/MedFMC/{dataset}/{dataset}_{nshot}-shot_val_exp{exp_num}.txt'),
 )
 
@@ -60,7 +61,7 @@ test_dataloader = dict(
 optim_wrapper = dict(optimizer=dict(lr=lr))
 
 default_hooks = dict(
-    checkpoint = dict(type='CheckpointHook', interval=1, max_keep_ckpts=1),
+    checkpoint = dict(type='CheckpointHook', interval=1, max_keep_ckpts=1, save_best="auto"),
     logger=dict(interval=50),
 )
 

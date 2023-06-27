@@ -6,7 +6,7 @@ _base_ = [
 ]
 
 
-lr = 5e-3
+lr = 1e-3
 vpl = 1  
 dataset = 'chest'
 exp_num = 1
@@ -27,6 +27,7 @@ model = dict(
         type='PromptedViT',
         prompt_length=vpl,
         layer_scale_init_value=1e-5,
+        out_type='avg_all',
         img_size=518,
         patch_size=14,
         arch='base',
@@ -84,7 +85,7 @@ test_dataloader = dict(
 optim_wrapper = dict(optimizer=dict(lr=lr))
 
 default_hooks = dict(
-    checkpoint = dict(type='CheckpointHook', interval=1, max_keep_ckpts=1),
+    checkpoint = dict(type='CheckpointHook', interval=1, max_keep_ckpts=1, save_best="auto"),
     logger=dict(interval=50),
 )
 

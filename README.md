@@ -8,87 +8,26 @@ Install requirements by
 
 ```bash
 $ conda install pytorch==1.8.0 torchvision==0.9.0 torchaudio==0.8.0 cudatoolkit=10.1 -c pytorch
-$ pip install mmcls==0.25.0 openmim scipy scikit-learn ftfy regex tqdm
-$ mim install mmcv-full==1.6.0
+$ pip install openmim scipy scikit-learn ftfy regex tqdm
+$ mim install mmpretrain
 ```
-
-We suggest you install PyTorch successfully first, then install OpenMMLab packages and their dependencies.
-
-Moreover, you can use other Computer Vision or other foundation models such as [EVA](https://github.com/baaivision/EVA) and [CLIP](https://github.com/openai/CLIP).
 
 ## Results
 
 The results of ChestDR, ColonPath and Endo in MedFMC dataset and their corresponding configs on each task are shown as below.
 
-### Few-shot Learning Results
+### Few-shot Learning Results (10-shot/AUC)
 
-We utilize [Visual Prompt Tuning](https://github.com/KMnP/vpt) method as the few-shot learning baseline, whose backbone is Swin Transformer.
+We utilize [Visual Prompt Tuning](https://github.com/KMnP/vpt) method as the few-shot learning baseline, 
 The results are shown as below:
 
-#### ChestDR
-
-| N Shot | Crop Size | Epoch |  mAP  |  AUC  |                                      Config                                      |
-| :----: | :-------: | :---: | :---: | :---: | :------------------------------------------------------------------------------: |
-|   1    |  384x384  |  20   | 13.14 | 56.49 | [config](configs/swin-b_vpt/in21k-swin-b_vpt5_bs4_lr5e-2_1-shot_chest_adamw.py)  |
-|   5    |  384x384  |  20   | 17.05 | 64.86 | [config](configs/swin-b_vpt/in21k-swin-b_vpt5_bs4_lr5e-2_5-shot_chest_adamw.py)  |
-|   10   |  384x384  |  20   | 19.01 | 66.68 | [config](configs/swin-b_vpt/in21k-swin-b_vpt5_bs4_lr5e-2_10-shot_chest_adamw.py) |
-
-#### ColonPath
-
-| N Shot | Crop Size | Epoch |  Acc  |  AUC  |                                      Config                                      |
-| :----: | :-------: | :---: | :---: | :---: | :------------------------------------------------------------------------------: |
-|   1    |  384x384  |  20   | 77.60 | 84.69 | [config](configs/swin-b_vpt/in21k-swin-b_vpt5_bs4_lr5e-2_1-shot_colon_adamw.py)  |
-|   5    |  384x384  |  20   | 89.29 | 96.07 | [config](configs/swin-b_vpt/in21k-swin-b_vpt5_bs4_lr5e-2_5-shot_colon_adamw.py)  |
-|   10   |  384x384  |  20   | 91.21 | 97.14 | [config](configs/swin-b_vpt/in21k-swin-b_vpt5_bs4_lr5e-2_10-shot_colon_adamw.py) |
-
-#### Endo
-
-| N Shot | Crop Size | Epoch |  mAP  |  AUC  |                                     Config                                      |
-| :----: | :-------: | :---: | :---: | :---: | :-----------------------------------------------------------------------------: |
-|   1    |  384x384  |  20   | 19.70 | 62.18 | [config](configs/swin-b_vpt/in21k-swin-b_vpt5_bs4_lr5e-2_1-shot_endo_adamw.py)  |
-|   5    |  384x384  |  20   | 23.88 | 67.48 | [config](configs/swin-b_vpt/in21k-swin-b_vpt5_bs4_lr5e-2_5-shot_endo_adamw.py)  |
-|   10   |  384x384  |  20   | 25.62 | 71.41 | [config](configs/swin-b_vpt/in21k-swin-b_vpt5_bs4_lr5e-2_10-shot_endo_adamw.py) |
-
-#### ViT-base Result (AUC)
-
-|      Dataset    |   Swin  |  ViT-cls |  ViT-eva2 |  ViT-dinov2  | ViT-clip |
-| :-------------: |  :----: | :------: | :------:  |  :---------: | :------: | 
-|    ChestDR      |  62.18  |   62.18  |   62.18   |      62.18   |   -----  |
-|    ColonPath    |  67.48  |   62.18  |   62.18   |      62.18   |   -----  |
-|      Endo       |  71.41  |   62.18  |   62.18   |      62.18   |   -----  |
+|  Dataset \ Backbone  |   [Swin(384)](./configs/swin-b_vpt/)  |  [ViT-cls(384)](./configs/vit-b_vpt/) |  [ViT-eva2(448)](./configs/eva-b_vpt/) |  [ViT-dinov2(512)](./configs/dinov2-b_vpt/) | [ViT-clip(384)](./configs/clip-b_vpt/) |
+| :------------------: |  :----: | :------: | :------:  |  :---------: | :------: | 
+|  ChestDR (10-shot)   |  64.66  |   67.96  |   65.69   |      67.16   |   66.60  |
+| ColonPath (10-shot)  |  97.62  |   98.13  |   -----   |      -----   |   98.11  |
+|     Endo (10-shot)   |  64.89  |   66.18  |   -----   |      -----   |   65.79  |
  
-### Transfer Learning on 20% (Fully Supervised Task)
-
-Noted that MedFMC mainly focuses on few-shot learning i.e., transfer learning task.
-Thus, fully supervised learning tasks below only use 20% training data to make corresponding comparisons.
-
-#### ChestDR
-
-|    Backbone     | Crop Size | Epoch |  mAP  |  AUC  |                        Config                         |
-| :-------------: | :-------: | :---: | :---: | :---: | :---------------------------------------------------: |
-|   DenseNet121   |  384x384  |  20   | 24.48 | 75.25 |     [config](configs/densenet/dense121_chest.py)      |
-| EfficientNet-B5 |  384x384  |  20   | 29.08 | 77.21 |    [config](configs/efficientnet/eff-b5_chest.py)     |
-|     Swin-B      |  384x384  |  20   | 31.07 | 78.56 | [config](configs/swin_transformer/swin-base_chest.py) |
-
-#### ColonPath
-
-|    Backbone     | Crop Size | Epoch |  Acc  |  AUC  |                        Config                         |
-| :-------------: | :-------: | :---: | :---: | :---: | :---------------------------------------------------: |
-|   DenseNet121   |  384x384  |  20   | 92.73 | 98.27 |     [config](configs/densenet/dense121_colon.py)      |
-| EfficientNet-B5 |  384x384  |  20   | 94.04 | 98.58 |    [config](configs/efficientnet/eff-b5_colon.py)     |
-|     Swin-B      |  384x384  |  20   | 94.68 | 98.35 | [config](configs/swin_transformer/swin-base_colon.py) |
-
-#### Endo
-
-|    Backbone     | Crop Size | Epoch |  mAP  |  AUC  |                        Config                        |
-| :-------------: | :-------: | :---: | :---: | :---: | :--------------------------------------------------: |
-|   DenseNet121   |  384x384  |  20   | 41.13 | 80.19 |     [config](configs/densenet/dense121_endo.py)      |
-| EfficientNet-B5 |  384x384  |  20   | 36.95 | 78.23 |    [config](configs/efficientnet/eff-b5_endo.py)     |
-|     Swin-B      |  384x384  |  20   | 41.38 | 79.42 | [config](configs/swin_transformer/swin-base_endo.py) |
-
-## License
-
-This project is released under the [Apache 2.0 license](LICENSE).
+ All the bakcbones use 'base' arch.
 
 ## Usage
 
@@ -243,6 +182,11 @@ docker build -t baseline .
 ```shell
 docker save baseline | gzip -c > baseline.tar.gz
 ```
+
+
+## License
+
+This project is released under the [Apache 2.0 license](LICENSE).
 
 ## Citation
 

@@ -54,7 +54,7 @@ class PromptedViTEVA02(ViTEVA02):
     '''
 
     num_extra_tokens = 1  # class token
-    OUT_TYPES = {'raw', 'cls_token', 'featmap', 'avg_featmap', 'avg_all', 'avg_prompt', 'avg_prompt_clstoken'}
+    OUT_TYPES = {'raw', 'cls_token', 'featmap', 'avg_featmap', 'avg_all', 'avg_prompt', 'avg_prompt_clstoken', 'avg_three'}
     # 'avg_all' : avg of 'prompt' & 'cls_token' & 'featmap'
     # 'avg_prompt' avg of 'prompt'
     # 'avg_prompt_clstoken' avg of 'cls_token' and 'prompt'
@@ -86,7 +86,7 @@ class PromptedViTEVA02(ViTEVA02):
         self.prompt_length = prompt_length
         self.deep_prompt = deep_prompt
 
-        if self.out_type in {'avg_featmap', 'avg_all', 'avg_prompt', 'avg_prompt_clstoken'}:
+        if self.out_type in {'avg_featmap', 'avg_all', 'avg_prompt', 'avg_prompt_clstoken', 'avg_three'}:
             self.ln2 = build_norm_layer(norm_cfg, self.embed_dims)
         
         # freeze stages 
@@ -156,5 +156,10 @@ class PromptedViTEVA02(ViTEVA02):
             return self.ln2(x[:, 1:self.prompt_length+1].mean(dim=1))  
         if self.out_type == 'avg_prompt_clstoken':
             return self.ln2(x[:, :self.prompt_length+1].mean(dim=1))  
+        if self.out_type == 'avg_three':
+            avg_feat_token = x[:, :self.prompt_length+1].mean(dim=1)
+            avg_prompt = x[:, 1:self.prompt_length+1].mean(dim=1)
+            cls_token = x[:, 0]
+            return self.ln2( (avg_feat_token +  avg_prompt + cls_token) / 3)  
          
 

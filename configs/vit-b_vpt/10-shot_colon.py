@@ -27,6 +27,7 @@ model = dict(
         type='PromptedViT',
         prompt_length=vpl,
         patch_size=16,
+        out_type='cls_token',
         arch='b',
         img_size=384,
         init_cfg=dict(
@@ -50,7 +51,7 @@ train_dataloader = dict(
 )
 
 val_dataloader = dict(
-    batch_size=4,  
+    batch_size=8,  
     dataset=dict(ann_file=f'data_backup/MedFMC/{dataset}/{dataset}_{nshot}-shot_val_exp{exp_num}.txt'),
 )
 
@@ -62,7 +63,7 @@ test_dataloader = dict(
 optim_wrapper = dict(optimizer=dict(lr=lr))
 
 default_hooks = dict(
-    checkpoint = dict(type='CheckpointHook', interval=1, max_keep_ckpts=1),
+    checkpoint = dict(type='CheckpointHook', interval=1, max_keep_ckpts=1, save_best="auto"),
     logger=dict(interval=50),
 )
 

@@ -19,7 +19,7 @@ class PromptedViT(VisionTransformer):
     # 'avg_all' : avg of 'prompt' & 'cls_token' & 'featmap'
     # 'avg_prompt' avg of 'prompt'
     # 'avg_prompt_clstoken' avg of 'cls_token' and 'prompt'
-    # 'avg_three'
+    # 'avg_three' avg of 'cls_token', avg(prompt) and avg(featmap)
     def __init__(self,
                  prompt_length = 1,
                  deep_prompt = True,
@@ -110,7 +110,7 @@ class PromptedViT(VisionTransformer):
             # (B, N, C) -> (B, H, W, C) -> (B, C, H, W)
             return patch_token.reshape(B, *hw, -1).permute(0, 3, 1, 2)
         if self.out_type == 'avg_featmap':
-            return self.ln2(x[:, self.prompt_length:].mean(dim=1))     
+            return self.ln2(x[:, self.prompt_length+1:].mean(dim=1))     
         if self.out_type == 'avg_all':
             return self.ln2(x.mean(dim=1))  
         if self.out_type == 'avg_prompt':
@@ -118,6 +118,8 @@ class PromptedViT(VisionTransformer):
         if self.out_type == 'avg_prompt_clstoken':
             return self.ln2(x[:, :self.prompt_length+1].mean(dim=1))  
         if self.out_type == 'avg_three':
-            feat_token = x[:, :self.prompt_length+1].mean(dim=1)
-            return self.ln2(x[:, :self.prompt_length + 1].mean(dim=1) + feat_token)  
+            avg_feat_token = x[:, self.prompt_length+1:].mean(dim=1)
+            avg_prompt = x[:, 1:self.prompt_length + 1].mean(dim=1)
+            cls_token = x[:, 0]
+            return self.ln2( avg_feat_token + avg_prompt + cls_token )  
          

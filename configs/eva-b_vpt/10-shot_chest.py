@@ -6,7 +6,7 @@ _base_ = [
 ]
 
 
-lr = 5e-3
+lr = 1e-3
 vpl = 1  
 dataset = 'chest'
 exp_num = 1
@@ -29,12 +29,13 @@ model = dict(
         patch_size=14,
         sub_ln=True,
         final_norm=False,
+        out_type='avg_featmap',
         arch='b',
-        img_size=224,
+        img_size=448,
         init_cfg=dict(
             type='Pretrained',
             checkpoint=
-            'https://download.openmmlab.com/mmpretrain/v1.0/eva02/eva02-base-p14_pre_in21k_20230505-2f2d4d3c.pth',
+            'https://download.openmmlab.com/mmpretrain/v1.0/eva02/eva02-base-p14_in21k-pre_in21k-medft_3rdparty_in1k-448px_20230505-5cd4d87f.pth',
             prefix='backbone',
         ),
         ),
@@ -49,7 +50,7 @@ train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(
         type='RandomResizedCrop',
-        scale=224,
+        scale=448,
         backend='pillow',
         interpolation='bicubic'),
     dict(type='RandomFlip', prob=0.5, direction='horizontal'),
@@ -60,29 +61,29 @@ test_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(
         type='ResizeEdge',
-        scale=224,
+        scale=448,
         edge='short',
         backend='pillow',
         interpolation='bicubic'),
-    dict(type='CenterCrop', crop_size=224),
+    dict(type='CenterCrop', crop_size=448),
     dict(type='PackInputs'),
 ]
 
 
 train_dataloader = dict(
-    batch_size=4, 
+    batch_size=1, 
     dataset=dict(ann_file=f'data_backup/MedFMC/{dataset}/{dataset}_{nshot}-shot_train_exp{exp_num}.txt',
     pipeline=train_pipeline),
 )
 
 val_dataloader = dict(
-    batch_size=4,  
+    batch_size=2,  
     dataset=dict(ann_file=f'data_backup/MedFMC/{dataset}/{dataset}_{nshot}-shot_val_exp{exp_num}.txt',
     pipeline=test_pipeline),
 )
 
 test_dataloader = dict(
-    batch_size=4,  
+    batch_size=2,  
     dataset=dict(ann_file=f'data_backup/MedFMC/{dataset}/test_WithLabel.txt',
     pipeline=test_pipeline),
 )
@@ -90,7 +91,7 @@ test_dataloader = dict(
 optim_wrapper = dict(optimizer=dict(lr=lr))
 
 default_hooks = dict(
-    checkpoint = dict(type='CheckpointHook', interval=1, max_keep_ckpts=1),
+    checkpoint = dict(type='CheckpointHook', interval=1, max_keep_ckpts=1, save_best="auto"),
     logger=dict(interval=50),
 )
 

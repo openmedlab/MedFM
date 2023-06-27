@@ -1,5 +1,5 @@
 _base_ = [
-    '../datasets/endoscopy.py',
+    '../datasets/chest.py',
     '../swin_schedule.py',
     'mmpretrain::_base_/default_runtime.py',
     '../custom_imports.py',
@@ -7,9 +7,9 @@ _base_ = [
 
 lr = 5e-3
 vpl = 1
-dataset = 'endo'
+dataset = 'chest'
 exp_num = 1
-nshot = 5
+nshot = 1
 run_name = f'vit-b_{nshot}-shot_ptokens-{vpl}_{dataset}'
 
 # dataset setting
@@ -25,23 +25,24 @@ model = dict(
     backbone=dict(
         type='PromptedViT',
         prompt_length=vpl,
-        patch_size=32,
+        patch_size=16,
+        out_type='cls_token',
         arch='b',
+        pre_norm=True,
         img_size=384,
         init_cfg=dict(
             type='Pretrained',
             checkpoint=
-            'https://download.openmmlab.com/mmclassification/v0/vit/finetune/vit-base-p32_in21k-pre-3rdparty_ft-64xb64_in1k-384_20210928-9cea8599.pth',
+            'https://download.openmmlab.com/mmclassification/v0/clip/clip-vit-base-p16_laion2b-in12k-pre_3rdparty_in1k-384px_20221220-84ed0cc0.pth',
             prefix='backbone',
         ),
         ),
     neck=None,
     head=dict(
         type='MultiLabelLinearClsHead',
-        num_classes=4,
+        num_classes=19,
         in_channels=768,
     ))
-
 train_dataloader = dict(
     batch_size=4, 
     dataset=dict(ann_file=f'data_backup/MedFMC/{dataset}/{dataset}_{nshot}-shot_train_exp{exp_num}.txt'),
@@ -64,4 +65,5 @@ default_hooks = dict(
     logger=dict(interval=50),
 )
 
-work_dir = f'work_dirs/vit-b/exp{exp_num}/{run_name}'
+work_dir = f'work_dirs/clip-b/exp{exp_num}/{run_name}'
+
