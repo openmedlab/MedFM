@@ -13,10 +13,10 @@ exp_num = 1
 nshot = 10
 run_name = f'vit-b_{nshot}-shot_ptokens-{vpl}_{dataset}'
 
-# dataset setting
 data_preprocessor = dict(
-    mean=[127.5, 127.5, 127.5],
-    std=[127.5, 127.5, 127.5],
+    # RGB format normalization parameters
+    mean=[0.48145466 * 255, 0.4578275 * 255, 0.40821073 * 255],
+    std=[0.26862954 * 255, 0.26130258 * 255, 0.27577711 * 255],
     # convert image from BGR to RGB
     to_rgb=True,
 )
@@ -36,8 +36,7 @@ model = dict(
             type='Pretrained',
             checkpoint=
             'https://download.openmmlab.com/mmpretrain/v1.0/eva02/eva02-base-p14_in21k-pre_in21k-medft_3rdparty_in1k-448px_20230505-5cd4d87f.pth',
-            prefix='backbone',
-        ),
+            prefix='backbone',),
         ),
     neck=None,
     head=dict(
@@ -72,24 +71,21 @@ test_pipeline = [
 
 
 train_dataloader = dict(
-    batch_size=4, 
-    dataset=dict(
-        ann_file=f'data_backup/MedFMC/{dataset}/{dataset}_{nshot}-shot_train_exp{exp_num}.txt',
-        pipeline=train_pipeline),
+    batch_size=1, 
+    dataset=dict(ann_file=f'data_backup/MedFMC/{dataset}/{dataset}_{nshot}-shot_train_exp{exp_num}.txt',
+    pipeline=train_pipeline),
 )
 
 val_dataloader = dict(
-    batch_size=8,  
-    dataset=dict(
-        ann_file=f'data_backup/MedFMC/{dataset}/{dataset}_{nshot}-shot_val_exp{exp_num}.txt',
-        pipeline=test_pipeline),
+    batch_size=2,  
+    dataset=dict(ann_file=f'data_backup/MedFMC/{dataset}/{dataset}_{nshot}-shot_val_exp{exp_num}.txt',
+    pipeline=test_pipeline),
 )
 
 test_dataloader = dict(
-    batch_size=4,  
-    dataset=dict(
-        ann_file=f'data_backup/MedFMC/{dataset}/test_WithLabel.txt',
-        pipeline=test_pipeline),
+    batch_size=2,  
+    dataset=dict(ann_file=f'data_backup/MedFMC/{dataset}/test_WithLabel.txt',
+    pipeline=test_pipeline),
 )
 
 optim_wrapper = dict(optimizer=dict(lr=lr))

@@ -36,8 +36,7 @@ model = dict(
             type='Pretrained',
             checkpoint=
             'https://download.openmmlab.com/mmpretrain/v1.0/eva02/eva02-base-p14_in21k-pre_in21k-medft_3rdparty_in1k-448px_20230505-5cd4d87f.pth',
-            prefix='backbone',
-        ),
+            prefix='backbone',),
         ),
     neck=None,
     head=dict(

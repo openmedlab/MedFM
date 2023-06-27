@@ -27,6 +27,7 @@ model = dict(
         type='PromptedViT',
         prompt_length=vpl,
         layer_scale_init_value=1e-5,
+        out_type='avg_all',
         img_size=518,
         patch_size=14,
         arch='base',
