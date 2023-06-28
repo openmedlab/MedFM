@@ -32,7 +32,7 @@ train_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         data_prefix='data/MedFMC_train/colon/images',
-        ann_file='data_backup/MedFMC/colon/train_20.txt',
+        ann_file='data_anns/MedFMC/colon/train_20.txt',
         pipeline=train_pipeline,),
     sampler=dict(type='DefaultSampler', shuffle=True),
 )
@@ -43,7 +43,7 @@ val_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         data_prefix='data/MedFMC_train/colon/images',
-        ann_file='data_backup/MedFMC/colon/val_20.txt',
+        ann_file='data_anns/MedFMC/colon/val_20.txt',
         pipeline=test_pipeline),
     sampler=dict(type='DefaultSampler', shuffle=False),
 )
@@ -56,7 +56,7 @@ test_dataloader = dict(
         # replace `data/val` with `data/test` for standard test
         type=dataset_type,
         data_prefix='data/MedFMC_train/colon/images',
-        ann_file='data_backup/MedFMC/colon/test_WithLabel.txt',
+        ann_file='data_anns/MedFMC/colon/test_WithLabel.txt',
         pipeline=test_pipeline),
     sampler=dict(type='DefaultSampler', shuffle=False),
 )

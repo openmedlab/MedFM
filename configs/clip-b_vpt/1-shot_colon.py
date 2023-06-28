@@ -47,17 +47,17 @@ model = dict(
 
 train_dataloader = dict(
     batch_size=4, 
-    dataset=dict(ann_file=f'data_backup/MedFMC/{dataset}/{dataset}_{nshot}-shot_train_exp{exp_num}.txt'),
+    dataset=dict(ann_file=f'data_anns/MedFMC/{dataset}/{dataset}_{nshot}-shot_train_exp{exp_num}.txt'),
 )
 
 val_dataloader = dict(
     batch_size=8,  
-    dataset=dict(ann_file=f'data_backup/MedFMC/{dataset}/{dataset}_{nshot}-shot_val_exp{exp_num}.txt'),
+    dataset=dict(ann_file=f'data_anns/MedFMC/{dataset}/{dataset}_{nshot}-shot_val_exp{exp_num}.txt'),
 )
 
 test_dataloader = dict(
     batch_size=4,  
-    dataset=dict(ann_file=f'data_backup/MedFMC/{dataset}/test_WithLabel.txt'),
+    dataset=dict(ann_file=f'data_anns/MedFMC/{dataset}/test_WithLabel.txt'),
 )
 
 optim_wrapper = dict(optimizer=dict(lr=lr))

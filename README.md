@@ -2,6 +2,8 @@
 
 A naive baseline and submission demo for the [Foundation Model Prompting for Medical Image Classification Challenge 2023 (MedFM)](https://medfm2023.grand-challenge.org/medfm2023/).
 
+It is base on the [MMPreTrain](https://github.com/open-mmlab/mmpretrain), it has backbone of **`ViT-cls`**, **`ViT-eva02`**, **`ViT-dinov2`**, **`Swin-cls`** and **`ViT-clip`**. More details could be found in its [document](https://mmpretrain.readthedocs.io/en/latest/index.html).
+
 ## Installation
 
 Install requirements by
@@ -24,51 +26,46 @@ The results are shown as below:
 |  Dataset \ Backbone  |   [Swin(384)](./configs/swin-b_vpt/)  |  [ViT-cls(384)](./configs/vit-b_vpt/) |  [ViT-eva2(448)](./configs/eva-b_vpt/) |  [ViT-dinov2(512)](./configs/dinov2-b_vpt/) | [ViT-clip(384)](./configs/clip-b_vpt/) |
 | :------------------: |  :----: | :------: | :------:  |  :---------: | :------: | 
 |  ChestDR (10-shot)   |  64.66  |   67.96  |   65.69   |      67.16   |   66.60  |
-| ColonPath (10-shot)  |  97.62  |   98.13  |   -----   |      -----   |   98.11  |
-|     Endo (10-shot)   |  64.89  |   66.18  |   -----   |      -----   |   65.79  |
+| ColonPath (10-shot)  |  97.62  |   98.13  |   97.62   |      97.30   |   98.11  |
+|     Endo (10-shot)   |  64.89  |   66.18  |   67.78   |      64.40   |   65.79  |
  
  All the bakcbones use 'base' arch.
 
 ## Usage
 
-### Data preparation
+### Preparation
 
-Prepare data following [MMClassification](https://github.com/open-mmlab/mmclassification). The data structure looks like below:
+Prepare data following [MMPreTrain](https://github.com/open-mmlab/mmpretrain). Download the dataset and unzip the '.zip' files into {$MedFM}/data/ as following: 
 
 ```text
-data/
-├── MedFMC
-│   ├── chest
-│   │   ├── images
-│   │   ├── chest_X-shot_train_expY.txt
-│   │   ├── chest_X-shot_val_expY.txt
-│   │   ├── train_20.txt
-│   │   ├── val_20.txt
-│   │   ├── trainval.txt
-│   │   ├── test_WithLabel.txt
-│   ├── colon
-│   │   ├── images
-│   │   ├── colon_X-shot_train_expY.txt
-│   │   ├── colon_X-shot_val_expY.txt
-│   │   ├── train_20.txt
-│   │   ├── val_20.txt
-│   │   ├── trainval.txt
-│   │   ├── test_WithLabel.txt
-│   ├── endo
-│   │   ├── images
-│   │   ├── endo_X-shot_train_expY.txt
-│   │   ├── endo_X-shot_val_expY.txt
-│   │   ├── train_20.txt
-│   │   ├── val_20.txt
-│   │   ├── trainval.txt
-│   │   ├── test_WithLabel.txt
+MedFM (root)/
+    ├── docker               # dockerfiles
+    ├── configs              # all the configs
+    │   ├── clip-b_vpt
+    │   ├── swin-b_vpt
+    │   ├── dinov2-b_vpt
+    │   └── ...
+    ├── data               
+    │   ├── MedFMC_train      # unzip the download file
+    │   ├── MedFMC_val
+    │   └── ...
+    ├── data_anns
+    │   ├── MedFMC
+    │   |    ├── chest
+    │   |    ├── colon
+    │   |    ├── endo
+    │   ├── result             # sample example to submit 
+    │   └── ...
+    ├── medfmc                 # all source code
+    ├── tools                  # train, test and other tools
+    └── ...
 ```
 
 Noted that the `.txt` files includes data split information for fully supervised learning and few-shot learning tasks.
 The public dataset is splited to `trainval.txt` and `test_WithLabel.txt`, and `trainval.txt` is also splited to `train_20.txt` and `val_20.txt` where `20` means the training data makes up 20% of `trainval.txt`.
 And the `test_WithoutLabel.txt` of each dataset is validation set.
 
-Corresponding `.txt` files are stored at `./data_backup/` folder, the few-shot learning data split files `{dataset}_{N_shot}-shot_train/val_exp{N_exp}.txt` could also be generated as below:
+Corresponding `.txt` files are stored at `./data_anns/` folder, the few-shot learning data split files `{dataset}_{N_shot}-shot_train/val_exp{N_exp}.txt` could also be generated as below:
 
 ```shell
 python tools/generate_few-shot_file.py
@@ -99,38 +96,13 @@ python tools/test.py $CONFIG $CHECKPOINT
 
 ```
 
-The repository is built upon [MMPretrain](https://github.com/open-mmlab/mmpretrain). More details could be found in its [document](https://mmpretrain.readthedocs.io/en/latest/index.html).
-
 ### Generating Submission results of validation set
 
 Run
 
 ```bash
-python tools/test_prediction.py $DATASETPATH/test_WithoutLabel.txt $DATASETPATH/images/ $CONFIG $CHECKPOINT --output-prediction $DATASET_N-shot.txt
+python tools/infer.py $CONFIF $WEIGHT $IMAGE_FOLDER --batch-size 4 --out $OUT_FILE_PATH
 ```
-
-For example:
-
-```bash
-python tools/test_prediction.py data/MedFMC/endo/test_WithoutLabel.txt data/MedFMC/endo/images/ $CONFIG $CHECKPOINT --output-prediction endo_10-shot.txt
-```
-
-You can generate all prediction results of `endo_N-shot.txt`, `colon_N-shot.txt` and `chest_N-shot.txt` and zip them into `result.zip` file. Then upload it to Grand Challenge website.
-
-```
-result/
-├── endo_1-shot.txt
-├── endo_5-shot.txt
-├── endo_10-shot.txt
-├── colon_1-shot.txt
-├── colon_5-shot.txt
-├── colon_10-shot.txt
-├── chest_1-shot.txt
-├── chest_5-shot.txt
-├── chest_10-shot.txt
-```
-
-You can see `./data_backup/result` for more details.
 
 ## Using MedFMC repo with Docker
 

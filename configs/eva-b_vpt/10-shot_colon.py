@@ -11,7 +11,7 @@ vpl = 1
 dataset = 'colon'
 exp_num = 1
 nshot = 10
-run_name = f'eva02-b-b_{nshot}-shot_ptokens-{vpl}_{dataset}'
+run_name = f'eva02-b_{nshot}-shot_ptokens-{vpl}_{dataset}'
 
 data_preprocessor = dict(
     # RGB format normalization parameters
@@ -72,19 +72,19 @@ test_pipeline = [
 
 train_dataloader = dict(
     batch_size=1, 
-    dataset=dict(ann_file=f'data_backup/MedFMC/{dataset}/{dataset}_{nshot}-shot_train_exp{exp_num}.txt',
+    dataset=dict(ann_file=f'data_anns/MedFMC/{dataset}/{dataset}_{nshot}-shot_train_exp{exp_num}.txt',
     pipeline=train_pipeline),
 )
 
 val_dataloader = dict(
     batch_size=2,  
-    dataset=dict(ann_file=f'data_backup/MedFMC/{dataset}/{dataset}_{nshot}-shot_val_exp{exp_num}.txt',
+    dataset=dict(ann_file=f'data_anns/MedFMC/{dataset}/{dataset}_{nshot}-shot_val_exp{exp_num}.txt',
     pipeline=test_pipeline),
 )
 
 test_dataloader = dict(
     batch_size=2,  
-    dataset=dict(ann_file=f'data_backup/MedFMC/{dataset}/test_WithLabel.txt',
+    dataset=dict(ann_file=f'data_anns/MedFMC/{dataset}/test_WithLabel.txt',
     pipeline=test_pipeline),
 )
 
@@ -95,4 +95,4 @@ default_hooks = dict(
     logger=dict(interval=50),
 )
 
-work_dir = f'work_dirs/eva02-b-b/exp{exp_num}/{run_name}'
+work_dir = f'work_dirs/eva02-b/exp{exp_num}/{run_name}'
