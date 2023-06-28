@@ -61,6 +61,8 @@ MedFM (root)/
     └── ...
 ```
 
+<details><summary>click to show the detail of data_anns</summary>
+
 Noted that the `.txt` files includes data split information for fully supervised learning and few-shot learning tasks.
 The public dataset is splited to `trainval.txt` and `test_WithLabel.txt`, and `trainval.txt` is also splited to `train_20.txt` and `val_20.txt` where `20` means the training data makes up 20% of `trainval.txt`.
 And the `test_WithoutLabel.txt` of each dataset is validation set.
@@ -75,13 +77,9 @@ Where `N_shot` is 1,5 and 10, respectively, the shot is of patient(i.e., 1-shot 
 
 The `images` in each dataset folder contains its images, which could be achieved from original dataset.
 
-### Training and evaluation using OpenMMLab codebases.
+</details>
 
-In this repository we provided many config files for fully supervised task (only uses 20% of original traning set, please check out the `.txt` files which split dataset)
-and few-shot learning task.
-
-The config files of fully supervised transfer learning task are stored at `./configs/densenet`, `./configs/efficientnet`, `./configs/vit-base` and
-`./configs/swin_transformer` folders, respectively. The config files of few-shot learning task are stored at `./configs/ablation_exp` and `./configs/vit-b16_vpt` folders.
+### Training and Test
 
 For the training and testing, you can directly use commands below to train and test the model:
 
@@ -96,7 +94,7 @@ python tools/test.py $CONFIG $CHECKPOINT
 
 ```
 
-### Generating Submission results of validation set
+### Generating Submission results
 
 Run
 
@@ -105,6 +103,8 @@ python tools/infer.py $CONFIF $WEIGHT $IMAGE_FOLDER --batch-size 4 --out $OUT_FI
 ```
 
 ## Using MedFMC repo with Docker
+
+<details><summary>click to show the detail</summary>
 
 More details of Docker could be found in this [tutorial](https://nbviewer.org/github/ericspod/ContainersForCollaboration/blob/master/ContainersForCollaboration.ipynb).
 
@@ -125,6 +125,8 @@ docker run --gpus all --shm-size=8g -it -v {DATA_DIR}:/medfmc/data medfmc
 ```
 
 ### Build Docker and make sanity test
+
+
 
 The submitted docker will be evaluated by the following command:
 
@@ -155,6 +157,7 @@ docker build -t baseline .
 docker save baseline | gzip -c > baseline.tar.gz
 ```
 
+</details>
 
 ## License
 
