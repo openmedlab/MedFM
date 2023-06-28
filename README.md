@@ -2,7 +2,7 @@
 
 A naive baseline and submission demo for the [Foundation Model Prompting for Medical Image Classification Challenge 2023 (MedFM)](https://medfm2023.grand-challenge.org/medfm2023/).
 
-It is base on the [MMPreTrain](https://github.com/open-mmlab/mmpretrain), it has backbone of **`ViT-cls`**, **`ViT-eva02`**, **`ViT-dinov2`**, **`Swin-cls`** and **`ViT-clip`**. More details could be found in its [document](https://mmpretrain.readthedocs.io/en/latest/index.html).
+It is base on the [MMPreTrain](https://github.com/open-mmlab/mmpretrain), it has backbone of [**`ViT-cls`**](./configs/vit-b_vpt/), [**`ViT-eva02`**](./configs/eva-b_vpt/), [**`ViT-dinov2`**](./configs/dinov2-b_vpt/), [**`Swin-cls`**](./configs/swin-b_vpt/) and [**`ViT-clip`**](./configs/clip-b_vpt/). More details could be found in its [document](https://mmpretrain.readthedocs.io/en/latest/index.html).
 
 ## Installation
 
