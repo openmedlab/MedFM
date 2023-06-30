@@ -16,6 +16,9 @@ We suggest you install PyTorch successfully first, then install OpenMMLab packag
 
 Moreover, you can use other Computer Vision or other foundation models such as [EVA](https://github.com/baaivision/EVA) and [CLIP](https://github.com/openai/CLIP).
 
+Third party implementation of MedFMC baseline is supported! It is based on the [MMPreTrain](https://github.com/open-mmlab/mmpretrain), with backbone of **`ViT-cls`**, **`ViT-eva02`**, **`ViT-dinov2`**, **`Swin-cls`** and **`ViT-clip`**.
+More details could be found in its [document](https://mmpretrain.readthedocs.io/en/latest/index.html). Please check out [here](https://github.com/openmedlab/MedFM/tree/master).
+
 ## Results
 
 The results of ChestDR, ColonPath and Endo in MedFMC dataset and their corresponding configs on each task are shown as below.
@@ -241,6 +244,10 @@ docker build -t baseline .
 ```shell
 docker save baseline | gzip -c > baseline.tar.gz
 ```
+
+## Acknowledgement
+
+Thanks [Ezra-Yu](https://github.com/Ezra-Yu) for contributing **`ViT-cls`**, **`ViT-eva02`**, **`ViT-dinov2`**, **`Swin-cls`** and **`ViT-clip`** with [MMPretrain](https://github.com/open-mmlab/mmpretrain/tree/master) codebase.
 
 ## Citation
 
