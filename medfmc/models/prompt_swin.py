@@ -1,17 +1,29 @@
+# Copyright (c) OpenMMLab. All rights reserved.
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.checkpoint as cp
 from copy import deepcopy
-from mmcls.models import BACKBONES
-from mmcls.models.backbones.swin_transformer import (SwinBlock,
+
+from copy import deepcopy
+from typing import Sequence
+
+import torch
+import torch.nn as nn
+import torch.utils.checkpoint as cp
+from mmcv.cnn.bricks.transformer import PatchEmbed, PatchMerging
+from mmengine.model import ModuleList
+from mmpretrain.registry import MODELS
+
+from mmpretrain.models.utils import (ShiftWindowMSA, resize_pos_embed, to_2tuple)
+
+
+from mmpretrain.models.backbones.swin_transformer import (SwinBlock,
                                                      SwinBlockSequence,
                                                      SwinTransformer)
-from mmcls.models.utils import resize_pos_embed, to_2tuple
-from mmcls.models.utils.attention import ShiftWindowMSA, WindowMSA
+from mmpretrain.models.utils.attention import ShiftWindowMSA, WindowMSA
 from mmcv.cnn.bricks.transformer import (AdaptivePadding, PatchEmbed,
                                          PatchMerging)
-from mmcv.runner.base_module import BaseModule, ModuleList
 from typing import List, Sequence
 
 
@@ -308,10 +320,10 @@ class PromptedShiftWindowMSA(ShiftWindowMSA):
                  proj_drop=0,
                  dropout_layer=dict(type='DropPath', drop_prob=0.),
                  pad_small_map=False,
-                 input_resolution=None,
-                 auto_pad=None,
+                #  input_resolution=None,
+                #  auto_pad=None,
                  window_msa=WindowMSA,
-                 msa_cfg=dict(),
+                #  msa_cfg=dict(),
                  init_cfg=None,
                  prompt_length=1,
                  prompt_pos='prepend'):
@@ -326,10 +338,10 @@ class PromptedShiftWindowMSA(ShiftWindowMSA):
             proj_drop=proj_drop,
             dropout_layer=dropout_layer,
             pad_small_map=pad_small_map,
-            input_resolution=input_resolution,
-            auto_pad=auto_pad,
+            # input_resolution=input_resolution,
+            # auto_pad=auto_pad,
             window_msa=window_msa,
-            msa_cfg=msa_cfg,
+            # msa_cfg=msa_cfg,
             init_cfg=init_cfg)
         self.prompt_length = prompt_length
         self.prompt_pos = prompt_pos
@@ -344,7 +356,7 @@ class PromptedShiftWindowMSA(ShiftWindowMSA):
                 qk_scale=qk_scale,
                 attn_drop=attn_drop,
                 proj_drop=proj_drop,
-                **msa_cfg,
+                # **msa_cfg,
             )
 
     def forward(self, query, hw_shape):
@@ -655,7 +667,7 @@ class PromptedSwinBlockSequence(SwinBlockSequence):
             return self.embed_dims
 
 
-@BACKBONES.register_module()
+@MODELS.register_module()
 class PromptedSwinTransformer(SwinTransformer):
 
     def __init__(
@@ -674,8 +686,9 @@ class PromptedSwinTransformer(SwinTransformer):
         prompt_layers=None,
         prompt_pos='prepend',
         prompt_init='normal',
+        **kwargs
     ):
-        super().__init__(arch=arch)
+        super().__init__(arch=arch, **kwargs)
         self.prompt_length = prompt_length
         self.prompt_pos = prompt_pos
         self.avgpool = nn.AdaptiveAvgPool1d(1)

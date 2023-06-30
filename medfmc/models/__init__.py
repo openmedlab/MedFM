@@ -1,8 +1,9 @@
 from .prompt_swin import PromptedSwinTransformer
-from .prompt_vit import PromptedVisionTransformer
-from .vision_transformer import MedFMC_VisionTransformer
+from .prompt_vit import PromptedViT
+from .prompt_eva import PromptedViTEVA02
 
 __all__ = [
-    'PromptedVisionTransformer', 'MedFMC_VisionTransformer',
-    'PromptedSwinTransformer'
+    'PromptedViT', 
+    'PromptedSwinTransformer',
+    'PromptedViTEVA02'
 ]

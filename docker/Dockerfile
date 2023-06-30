@@ -18,14 +18,10 @@ RUN apt-get update && apt-get install -y git ninja-build libglib2.0-0 libsm6 lib
 
 RUN conda clean --all
 
-# Install MMCV
-ARG PYTORCH
-ARG CUDA
-ARG MMCV
-RUN ["/bin/bash", "-c", "pip install --no-cache-dir mmcv-full -f https://download.openmmlab.com/mmcv/dist/cu${CUDA//./}/torch${PYTORCH}/index.html"]
-
 # Install other dependencies
 ENV FORCE_CUDA="1"
-RUN pip install mmcls==0.25.0 openmim scipy scikit-learn ftfy regex tqdm
+RUN pip install -U openmim
+RUN mim install mmpretrain
+RUN pip install scipy scikit-learn ftfy regex tqdm
 # RUN git clone git@github.com:MengzhangLI/MedFMC.git /MedFMC
 WORKDIR /medfmc_exp

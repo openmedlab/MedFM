@@ -1,12 +1,51 @@
 import torch
 import torch.nn as nn
+from unittest.mock import patch
 from mmpretrain.registry import MODELS
-from mmpretrain.models.backbones import VisionTransformer
+from mmpretrain.models.backbones import ViTEVA02
 from mmpretrain.models.utils import resize_pos_embed
 from mmpretrain.models.utils import build_norm_layer
 
+
+
+def new_AttentionWithRoPE_forward_fn(self, x, patch_resolution):
+    B, N, _ = x.shape
+    H, W = patch_resolution
+    extra_token_num = N - H * W
+
+    qkv = self.qkv(x)
+    qkv = qkv.reshape(B, N, 3, self.num_heads, -1).permute(2, 0, 3, 1, 4)
+    q, k, v = qkv.unbind(dim=0)
+
+    if self.rope:
+        if extra_token_num > 0:
+            q_t = q[:, :, extra_token_num:, :]
+            ro_q_t = self.rope(q_t, patch_resolution)
+            q = torch.cat((q[:, :, :extra_token_num, :], ro_q_t), -2).type_as(v)
+
+            k_t = k[:, :, extra_token_num:, :]
+            ro_k_t = self.rope(k_t, patch_resolution)
+            k = torch.cat((k[:, :, :extra_token_num , :], ro_k_t), -2).type_as(v)
+        else:
+            q = self.rope(q, patch_resolution)
+            k = self.rope(k, patch_resolution)
+
+    q = q * self.scale
+
+    attn = (q @ k.transpose(-2, -1))
+    attn = attn.softmax(dim=-1).type_as(x)
+    attn = self.attn_drop(attn)
+
+    x = (attn @ v).transpose(1, 2).reshape(B, N, -1)
+
+    x = self.proj(x)
+    x = self.proj_drop(x)
+
+    return x
+
+
 @MODELS.register_module()
-class PromptedViT(VisionTransformer):
+class PromptedViTEVA02(ViTEVA02):
     '''
     
     prompt_length (int):
@@ -19,7 +58,6 @@ class PromptedViT(VisionTransformer):
     # 'avg_all' : avg of 'prompt' & 'cls_token' & 'featmap'
     # 'avg_prompt' avg of 'prompt'
     # 'avg_prompt_clstoken' avg of 'cls_token' and 'prompt'
-    # 'avg_three' avg of 'cls_token', avg(prompt) and avg(featmap)
     def __init__(self,
                  prompt_length = 1,
                  deep_prompt = True,
@@ -54,15 +92,16 @@ class PromptedViT(VisionTransformer):
         # freeze stages 
         self.frozen_stages = len(self.layers)
         self._freeze_stages()
-
+    
+    @patch('mmpretrain.models.backbones.vit_eva02.AttentionWithRoPE.forward', new_AttentionWithRoPE_forward_fn)
     def forward(self, x):
         B = x.shape[0]
         x, patch_resolution = self.patch_embed(x)
 
         if self.cls_token is not None:
             # stole cls_tokens impl from Phil Wang, thanks
-            cls_token = self.cls_token.expand(B, -1, -1)
-            x = torch.cat((cls_token, x), dim=1)
+            cls_tokens = self.cls_token.expand(B, -1, -1)
+            x = torch.cat((cls_tokens, x), dim=1)
 
         x = x + resize_pos_embed(
             self.pos_embed,
@@ -82,14 +121,13 @@ class PromptedViT(VisionTransformer):
 
         outs = []
         for i, layer in enumerate(self.layers):
-            x = layer(x)
-            
+            x = layer(x, patch_resolution)
+
             if self.deep_prompt and i != len(self.layers) - 1:
                 x = torch.cat(
                         [x[:, :1, :], prompt[i, :, :, :], x[:, self.prompt_length + 1:, :]],
                         dim=1)
 
-            # final_norm should be False here
             if i == len(self.layers) - 1 and self.final_norm:
                 x = self.ln1(x)
 
@@ -97,6 +135,7 @@ class PromptedViT(VisionTransformer):
                 outs.append(self._format_output(x, patch_resolution))
 
         return tuple(outs)
+
 
     def _format_output(self, x, hw):
         if self.out_type == 'raw':
@@ -110,7 +149,7 @@ class PromptedViT(VisionTransformer):
             # (B, N, C) -> (B, H, W, C) -> (B, C, H, W)
             return patch_token.reshape(B, *hw, -1).permute(0, 3, 1, 2)
         if self.out_type == 'avg_featmap':
-            return self.ln2(x[:, self.prompt_length+1:].mean(dim=1))     
+            return self.ln2(x[:, self.prompt_length:].mean(dim=1))     
         if self.out_type == 'avg_all':
             return self.ln2(x.mean(dim=1))  
         if self.out_type == 'avg_prompt':
@@ -118,8 +157,9 @@ class PromptedViT(VisionTransformer):
         if self.out_type == 'avg_prompt_clstoken':
             return self.ln2(x[:, :self.prompt_length+1].mean(dim=1))  
         if self.out_type == 'avg_three':
-            avg_feat_token = x[:, self.prompt_length+1:].mean(dim=1)
-            avg_prompt = x[:, 1:self.prompt_length + 1].mean(dim=1)
+            avg_feat_token = x[:, :self.prompt_length+1].mean(dim=1)
+            avg_prompt = x[:, 1:self.prompt_length+1].mean(dim=1)
             cls_token = x[:, 0]
-            return self.ln2( avg_feat_token + avg_prompt + cls_token )  
+            return self.ln2( (avg_feat_token +  avg_prompt + cls_token) / 3)  
          
+
