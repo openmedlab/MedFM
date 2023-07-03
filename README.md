@@ -2,7 +2,12 @@
 
 A naive baseline and submission demo for the [Foundation Model Prompting for Medical Image Classification Challenge 2023 (MedFM)](https://medfm2023.grand-challenge.org/medfm2023/).
 
-## Installation
+## ✨ Notification
+
+Please check out [master branch](https://github.com/openmedlab/MedFM/tree/master). Third party implementation of MedFMC baseline is supported! It is based on the [MMPreTrain](https://github.com/open-mmlab/mmpretrain), with backbone of **`ViT-cls`**, **`ViT-eva02`**, **`ViT-dinov2`**, **`Swin-cls`** and **`ViT-clip`**.
+More details could be found in its [document](https://mmpretrain.readthedocs.io/en/latest/index.html). Thanks [Ezra-Yu](https://github.com/Ezra-Yu) for this excellent work.
+
+## 🛠️ Installation
 
 Install requirements by
 
@@ -16,10 +21,7 @@ We suggest you install PyTorch successfully first, then install OpenMMLab packag
 
 Moreover, you can use other Computer Vision or other foundation models such as [EVA](https://github.com/baaivision/EVA) and [CLIP](https://github.com/openai/CLIP).
 
-Third party implementation of MedFMC baseline is supported! It is based on the [MMPreTrain](https://github.com/open-mmlab/mmpretrain), with backbone of **`ViT-cls`**, **`ViT-eva02`**, **`ViT-dinov2`**, **`Swin-cls`** and **`ViT-clip`**.
-More details could be found in its [document](https://mmpretrain.readthedocs.io/en/latest/index.html). Please check out [here](https://github.com/openmedlab/MedFM/tree/master).
-
-## Results
+## 📊 Results
 
 The results of ChestDR, ColonPath and Endo in MedFMC dataset and their corresponding configs on each task are shown as below.
 
@@ -81,11 +83,11 @@ Thus, fully supervised learning tasks below only use 20% training data to make c
 | EfficientNet-B5 |  384x384  |  20   | 36.95 | 78.23 |    [config](configs/efficientnet/eff-b5_endo.py)     |
 |     Swin-B      |  384x384  |  20   | 41.38 | 79.42 | [config](configs/swin_transformer/swin-base_endo.py) |
 
-## License
+## 🎫 License
 
 This project is released under the [Apache 2.0 license](LICENSE).
 
-## Usage
+## 🙌 Usage
 
 ### Data preparation
 
@@ -194,7 +196,7 @@ result/
 
 You can see `./data_backup/result` for more details.
 
-## Using MedFMC repo with Docker
+## 🏗️ Using MedFMC repo with Docker
 
 More details of Docker could be found in this [tutorial](https://nbviewer.org/github/ericspod/ContainersForCollaboration/blob/master/ContainersForCollaboration.ipynb).
 
@@ -245,10 +247,13 @@ docker build -t baseline .
 docker save baseline | gzip -c > baseline.tar.gz
 ```
 
-## Acknowledgement
+## 🖊️ Citation
 
-Thanks [Ezra-Yu](https://github.com/Ezra-Yu) for contributing **`ViT-cls`**, **`ViT-eva02`**, **`ViT-dinov2`**, **`Swin-cls`** and **`ViT-clip`** with [MMPretrain](https://github.com/open-mmlab/mmpretrain/tree/master) codebase.
-
-## Citation
-
-TO BE ADDED.
+```
+@article{wang2023medfmc,
+  title={MedFMC: A Real-world Dataset and Benchmark For Foundation Model Adaptation in Medical Image Classification},
+  author={Wang, Dequan and Wang, Xiaosong and Wang, Lilong and Li, Mengzhang and Da, Qian and Liu, Xiaoqiang and Gao, Xiangyu and Shen, Jun and He, Junjun and Shen, Tian and others},
+  journal={arXiv preprint arXiv:2306.09579},
+  year={2023}
+}
+```
