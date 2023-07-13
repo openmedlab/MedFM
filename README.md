@@ -165,38 +165,43 @@ python tools/test.py $CONFIG $CHECKPOINT --metrics AUC_multiclass
 
 The repository is built upon [MMClassification/MMPretrain](https://github.com/open-mmlab/mmpretrain/tree/master). More details could be found in its [document](https://mmpretrain.readthedocs.io/en/mmcls-0.x/).
 
-### Generating Submission results of validation set
+### Generating Submission results of Validation Phase
+
+Noted:
+
+- The order of filanames of all CSV files must follow the order of provided `colon_val.csv`, `chest_val.csv` and `endo_val.csv`! You can see files in `./data_backup/result_sample` for more details.
+- The name of CSV files in `result.zip` must be the same names `xxx_N-shot_submission.csv` below.
 
 Run
 
 ```bash
-python tools/test_prediction.py $DATASETPATH/test_WithoutLabel.txt $DATASETPATH/images/ $CONFIG $CHECKPOINT --output-prediction $DATASET_N-shot.txt
+python tools/test_prediction.py $DATASETPATH/test_WithoutLabel.txt $DATASETPATH/images/ $CONFIG $CHECKPOINT --output-prediction $DATASET_N-shot_submission.csv
 ```
 
 For example:
 
 ```bash
-python tools/test_prediction.py data/MedFMC/endo/test_WithoutLabel.txt data/MedFMC/endo/images/ $CONFIG $CHECKPOINT --output-prediction endo_10-shot.txt
+python tools/test_prediction.py data/MedFMC/endo/test_WithoutLabel.txt data/MedFMC/endo/images/ $CONFIG $CHECKPOINT --output-prediction endo_10-shot_submission.csv
 ```
 
-You can generate all prediction results of `endo_N-shot.txt`, `colon_N-shot.txt` and `chest_N-shot.txt` and zip them into `result.zip` file. Then upload it to Grand Challenge website.
+You can generate all prediction results of `endo_N-shot_submission.csv`, `colon_N-shot_submission.csv` and `chest_N-shot_submission.csv` and zip them into `result.zip` file. Then upload it to Grand Challenge website.
 
 ```
 result/
-├── endo_1-shot.txt
-├── endo_5-shot.txt
-├── endo_10-shot.txt
-├── colon_1-shot.txt
-├── colon_5-shot.txt
-├── colon_10-shot.txt
-├── chest_1-shot.txt
-├── chest_5-shot.txt
-├── chest_10-shot.txt
+├── endo_1-shot_submission.csv
+├── endo_5-shot_submission.csv
+├── endo_10-shot_submission.csv
+├── colon_1-shot_submission.csv
+├── colon_5-shot_submission.csv
+├── colon_10-shot_submission.csv
+├── chest_1-shot_submission.csv
+├── chest_5-shot_submission.csv
+├── chest_10-shot_submission.csv
 ```
 
-You can see `./data_backup/result` for more details.
+Then using `zip` to make them as `.zip` file and upload it to submission site of [Grand Challenge MedFMC Validation Phase](https://medfm2023.grand-challenge.org/evaluation/challenge-validation-results-submission-only/submissions/create/).
 
-## 🏗️ Using MedFMC repo with Docker
+## 🏗️ Using MedFMC repo with Docker (TO BE DONE)
 
 More details of Docker could be found in this [tutorial](https://nbviewer.org/github/ericspod/ContainersForCollaboration/blob/master/ContainersForCollaboration.ipynb).
 
