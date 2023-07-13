@@ -68,7 +68,7 @@ def main():
                 result = inference_model(model, file)[0]
                 f_out.write(image_name)
                 for j in range(len(result)):
-                    f_out.write(' ' + str(np.around(result[j], 8)))
+                    f_out.write(',' + str(np.around(result[j], 8)))
                 f_out.write('\n')
 
 
