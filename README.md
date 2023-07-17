@@ -199,7 +199,7 @@ result/
 ├── chest_10-shot_submission.csv
 ```
 
-Then using `zip` to make them as `.zip` file and upload it to submission site of [Grand Challenge MedFMC Validation Phase](https://medfm2023.grand-challenge.org/evaluation/challenge-validation-results-submission-only/submissions/create/).
+Then using `zip` to make them as `.zip` file(i.e., `result_sample.zip` in `./data_backup` folder) and upload it to submission site of [Grand Challenge MedFMC Validation Phase](https://medfm2023.grand-challenge.org/evaluation/challenge-validation-results-submission-only/submissions/create/).
 
 ## 🏗️ Using MedFMC repo with Docker (TO BE DONE)
 
