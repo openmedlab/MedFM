@@ -123,7 +123,7 @@ data/
 ```
 
 Noted that the `.txt` files includes data split information for fully supervised learning and few-shot learning tasks.
-The public dataset is splited to `trainval.txt` and `test_WithLabel.txt`, and `trainval.txt` is also splited to `train_20.txt` and `val_20.txt` where `20` means the training data makes up 20% of `trainval.txt`.
+The public dataset is splitted to `trainval.txt` and `test_WithLabel.txt`, and `trainval.txt` is also splitted to `train_20.txt` and `val_20.txt` where `20` means the training data makes up 20% of `trainval.txt`.
 And the `test_WithoutLabel.txt` of each dataset is validation set.
 
 Corresponding `.txt` files are stored at `./data_backup/` folder, the few-shot learning data split files `{dataset}_{N_shot}-shot_train/val_exp{N_exp}.txt` could also be generated as below:
@@ -230,7 +230,7 @@ docker container run --gpus all --shm-size=8g -m 28G -it --name teamname --rm -v
 ```
 
 - `--gpus`: specify the available GPU during inference
-- `-m`: spedify the maximum RAM
+- `-m`: specify the maximum RAM
 - `--name`: container name during running
 - `--rm`: remove the container after running
 - `-v $PWD:/medfmc_exp`: map local codebase folder to Docker `medfmc_exp` folder.
