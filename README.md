@@ -201,57 +201,6 @@ result/
 
 Then using `zip` to make them as `.zip` file(i.e., `result_sample.zip` in `./data_backup` folder) and upload it to submission site of [Grand Challenge MedFMC Validation Phase](https://medfm2023.grand-challenge.org/evaluation/challenge-validation-results-submission-only/submissions/create/).
 
-## 🏗️ Using MedFMC repo with Docker (TO BE DONE)
-
-More details of Docker could be found in this [tutorial](https://nbviewer.org/github/ericspod/ContainersForCollaboration/blob/master/ContainersForCollaboration.ipynb).
-
-### Preparation of Docker
-
-We provide a [Dockerfile](./docker/Dockerfile) to build an image. Ensure that your [docker version](https://docs.docker.com/engine/install/) >=19.03.
-
-```
-# build an image with PyTorch 1.11, CUDA 11.3
-# If you prefer other versions, just modified the Dockerfile
-docker build -t medfmc docker/
-```
-
-Run it with
-
-```
-docker run --gpus all --shm-size=8g -it -v {DATA_DIR}:/medfmc/data medfmc
-```
-
-### Build Docker and make sanity test
-
-The submitted docker will be evaluated by the following command:
-
-```bash
-docker container run --gpus all --shm-size=8g -m 28G -it --name teamname --rm -v $PWD:/medfmc_exp -v $PWD/data:/medfmc_exp/data teamname:latest /bin/bash -c "sh /medfmc_exp/run.sh"
-```
-
-- `--gpus`: specify the available GPU during inference
-- `-m`: specify the maximum RAM
-- `--name`: container name during running
-- `--rm`: remove the container after running
-- `-v $PWD:/medfmc_exp`: map local codebase folder to Docker `medfmc_exp` folder.
-- `-v $PWD/data:/medfmc_exp/data`: map local codebase folder to Docker `medfmc_exp/data` folder.
-- `teamname:latest`: docker image name (should be `teamname`) and its version tag. **The version tag should be `latest`**. Please do not use `v0`, `v1`... as the version tag
-- `/bin/bash -c "sh run.sh"`: start the prediction command.
-
-Assuming the team name is `baseline`, the Docker build command is
-
-```shell
-docker build -t baseline .
-```
-
-> During the inference, please monitor the GPU memory consumption using `watch nvidia-smi`. The GPU memory consumption should be less than 10G. Otherwise, it will run into an OOM error on the official evaluation server.
-
-### 3) Save Docker
-
-```shell
-docker save baseline | gzip -c > baseline.tar.gz
-```
-
 ## 🖊️ Citation
 
 ```
