@@ -255,10 +255,14 @@ docker save baseline | gzip -c > baseline.tar.gz
 ## 🖊️ Citation
 
 ```
-@article{wang2023medfmc,
-  title={MedFMC: A Real-world Dataset and Benchmark For Foundation Model Adaptation in Medical Image Classification},
+@article{wang2023real,
+  title={A real-world dataset and benchmark for foundation model adaptation in medical image classification},
   author={Wang, Dequan and Wang, Xiaosong and Wang, Lilong and Li, Mengzhang and Da, Qian and Liu, Xiaoqiang and Gao, Xiangyu and Shen, Jun and He, Junjun and Shen, Tian and others},
-  journal={arXiv preprint arXiv:2306.09579},
-  year={2023}
+  journal={Scientific Data},
+  volume={10},
+  number={1},
+  pages={574},
+  year={2023},
+  publisher={Nature Publishing Group UK London}
 }
 ```
